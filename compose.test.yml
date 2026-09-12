@@ -1,0 +1,18 @@
+# Живой OpenFGA для сквозных тестов (маркер fga): in-memory datastore, порт 18090.
+#   docker compose -f compose.test.yml up -d --wait openfga
+#   POL_TEST_FGA_URL=http://127.0.0.1:18090 uv run pytest -q
+services:
+  openfga:
+    image: openfga/openfga:v1.20.0
+    command: run
+    environment:
+      OPENFGA_DATASTORE_ENGINE: memory
+      OPENFGA_PLAYGROUND_ENABLED: "false"
+      OPENFGA_LOG_LEVEL: warn
+    ports:
+      - "127.0.0.1:18090:8080"
+    healthcheck:
+      test: ["CMD", "/openfga", "version"]
+      interval: 2s
+      timeout: 2s
+      retries: 10

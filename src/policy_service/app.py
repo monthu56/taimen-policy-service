@@ -8,6 +8,7 @@ tenant. Любая ошибка принятия решения — 503 `policy_
 
 from __future__ import annotations
 
+import json
 import logging
 import uuid
 from collections.abc import AsyncIterator, Sequence
@@ -16,6 +17,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 import uvicorn
+import yaml
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -303,10 +305,24 @@ def create_app(
     @app.post("/api/v1/catalogs/{service}", response_model=CatalogRegisterOut)
     async def register_catalog(
         service: str,
-        body: dict[str, Any],
+        request: Request,
         _: AuthContext | None = Depends(require_admin),
         session: AsyncSession = Depends(get_session),
     ) -> CatalogRegisterOut:
+        # Каталог принимается как JSON или как сырой YAML (text/yaml): так bootstrap
+        # отправляет authz/catalog.yaml сервиса без зависимости от PyYAML.
+        raw = await request.body()
+        content_type = request.headers.get("content-type", "")
+        try:
+            body = (
+                yaml.safe_load(raw.decode("utf-8"))
+                if "yaml" in content_type
+                else json.loads(raw.decode("utf-8") or "{}")
+            )
+        except (ValueError, yaml.YAMLError) as exc:
+            raise PolicyError("catalog_unreadable", 400, str(exc)) from exc
+        if not isinstance(body, dict):
+            raise PolicyError("catalog_invalid", 422, "каталог должен быть объектом")
         if body.get("service") != service:
             raise PolicyError("service_mismatch", 422, "service в теле не совпадает с путём")
         catalog, changed = await core.register_catalog(session, body)
