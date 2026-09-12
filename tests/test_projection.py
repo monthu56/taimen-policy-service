@@ -9,10 +9,10 @@ from typing import Any
 import httpx
 import pytest
 import yaml
-from tests.conftest import BOOTSTRAP_HEADERS, Environment, catalog_paths, requires_fga
 
 from policy_service.core import RelationChange
 from policy_service.projection import ControlPlaneSource, IamSource, ProjectionRunner
+from tests.conftest import BOOTSTRAP_HEADERS, Environment, catalog_paths, requires_fga
 
 pytestmark = [requires_fga, pytest.mark.fga]
 
