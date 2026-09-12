@@ -2,7 +2,7 @@
 
 | Событие | Tuples |
 |---|---|
-| workspace.created / moved | workspace#tenant, workspace#parent; корень → memory_namespace#scope |
+| workspace.created / moved | workspace#tenant, #parent; корень → memory_namespace:ws-<id>#scope |
 | task.created / updated | task#scope, task#owner, task#assignee, task#requested_by |
 | run.started | run#task, run#holder |
 | approval.requested | approval#scope (через scope задачи), approval#requested_by |
@@ -62,7 +62,8 @@ class ControlPlaneSource:
                 tenant_id=uuid.UUID(str(item["tenantId"])) if item.get("tenantId") else None,
                 type=str(item.get("type", "")),
                 payload=dict(item.get("payload") or {}),
-                actor_id=str(item["actorId"]) if item.get("actorId") else None,
+                # IAM identity, если журнал её несёт (CP-ADR-0055); иначе локальный id.
+                actor_id=str(item.get("iamActorId") or item.get("actorId") or "") or None,
                 entity_id=str(item.get("entityId", "")),
             )
             for item in body.get("items", [])
@@ -86,7 +87,7 @@ async def _workspace_created(core: PolicyCore, session: AsyncSession, ev: Source
     if parent:
         writes.append(RelationChange(ws, "parent", f"workspace:{parent}"))
     else:
-        writes.append(RelationChange(f"memory_namespace:{ev.entity_id}", "scope", ws))
+        writes.append(RelationChange(f"memory_namespace:ws-{ev.entity_id}", "scope", ws))
     await core.apply_relations(
         session, ev.tenant_id, source="control-plane", event_id=ev.id, writes=writes
     )
@@ -105,7 +106,7 @@ async def _workspace_moved(core: PolicyCore, session: AsyncSession, ev: SourceEv
         relation="parent",
         subject=f"workspace:{to_parent}" if to_parent else None,
     )
-    ns = RelationChange(f"memory_namespace:{ev.entity_id}", "scope", ws)
+    ns = RelationChange(f"memory_namespace:ws-{ev.entity_id}", "scope", ws)
     if to_parent:
         await core.apply_relations(
             session, ev.tenant_id, source="control-plane", event_id=ev.id, deletes=[ns]

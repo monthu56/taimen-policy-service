@@ -2,8 +2,8 @@
 
 | Событие | Действие |
 |---|---|
-| tenant.created | store tenant, memory_namespace:<tenant>#tenant |
-| principal.created | memory_namespace:<principal>#owner |
+| tenant.created | store tenant, memory_namespace:tenant-<id>#tenant |
+| principal.created | memory_namespace:principal-<id>#owner |
 | group_membership.added / removed | group#member |
 | principal.disabled, credential.revoked (principal) | отзыв всех bindings subject и его делегаций |
 """
@@ -71,7 +71,11 @@ class IamSource:
                 tenant,
                 source="iam",
                 event_id=event.id,
-                writes=[RelationChange(f"memory_namespace:{tenant}", "tenant", f"tenant:{tenant}")],
+                writes=[
+                    RelationChange(
+                        f"memory_namespace:tenant-{tenant}", "tenant", f"tenant:{tenant}"
+                    )
+                ],
             )
         elif event.type == "principal.created":
             pid = event.payload.get("principalId") or event.entity_id
@@ -81,7 +85,11 @@ class IamSource:
                     tenant,
                     source="iam",
                     event_id=event.id,
-                    writes=[RelationChange(f"memory_namespace:{pid}", "owner", f"principal:{pid}")],
+                    writes=[
+                        RelationChange(
+                            f"memory_namespace:principal-{pid}", "owner", f"principal:{pid}"
+                        )
+                    ],
                 )
         elif event.type in {"group_membership.added", "group_membership.removed"}:
             group = event.payload.get("groupId") or event.entity_id

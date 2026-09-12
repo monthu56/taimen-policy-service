@@ -364,7 +364,9 @@ def create_app(
             source="admin",
             event_id="ensure-store",
             writes=[
-                RelationChange(f"memory_namespace:{tenant_id}", "tenant", f"tenant:{tenant_id}")
+                RelationChange(
+                    f"memory_namespace:tenant-{tenant_id}", "tenant", f"tenant:{tenant_id}"
+                )
             ],
         )
         await session.commit()

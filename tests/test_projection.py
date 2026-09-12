@@ -166,7 +166,7 @@ def test_control_plane_projection(env: Environment) -> None:
         json={"action": "memory.read", "resourceType": "memory_namespace", "consistency": "strong"},
         headers=env.auth(tenant, subject_id=carol, scopes=["policy:check"]),
     )
-    assert r.json()["objects"] == [portfolio]
+    assert r.json()["objects"] == [f"ws-{portfolio}"]
 
     # повторный прогон того же журнала идемпотентен
     async def rerun() -> None:
@@ -252,7 +252,7 @@ def test_iam_projection_groups_and_disable(env: Environment) -> None:
         json={"action": "memory.read", "resourceType": "memory_namespace", "consistency": "strong"},
         headers=headers,
     )
-    assert set(r.json()["objects"]) == {dave, str(tenant)}
+    assert set(r.json()["objects"]) == {f"principal-{dave}", f"tenant-{tenant}"}
 
     # отключение principal отзывает его прямые bindings
     env.client.post(

@@ -7,6 +7,7 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 import yaml
+
 from tests.conftest import BOOTSTRAP_HEADERS, Environment, catalog_paths, requires_fga
 
 pytestmark = [requires_fga, pytest.mark.fga]
@@ -45,7 +46,7 @@ def _tree(env: Environment, tenant: uuid.UUID) -> tuple[str, str, str]:
                     RelationChange(f"workspace:{child}", "tenant", f"tenant:{tenant}"),
                     RelationChange(f"workspace:{child}", "parent", f"workspace:{portfolio}"),
                     RelationChange(
-                        f"memory_namespace:{portfolio}", "scope", f"workspace:{portfolio}"
+                        f"memory_namespace:ws-{portfolio}", "scope", f"workspace:{portfolio}"
                     ),
                 ],
             )
@@ -122,7 +123,10 @@ def test_binding_inheritance_and_revoke(env: Environment) -> None:
     # memory namespace через scope
     resp = env.client.post(
         "/api/v1/decisions:check",
-        json={"action": "memory.read", "resource": {"type": "memory_namespace", "id": portfolio}},
+        json={
+            "action": "memory.read",
+            "resource": {"type": "memory_namespace", "id": f"ws-{portfolio}"},
+        },
         headers=headers,
     )
     assert resp.json()["allowed"] is True
@@ -140,7 +144,7 @@ def test_binding_inheritance_and_revoke(env: Environment) -> None:
         json={"action": "memory.read", "resourceType": "memory_namespace"},
         headers=headers,
     )
-    assert resp.json()["objects"] == [portfolio]
+    assert resp.json()["objects"] == [f"ws-{portfolio}"]
 
     # explain по decision_id
     decision = check(child)
