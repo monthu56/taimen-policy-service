@@ -1,0 +1,26 @@
+# Копия control-plane/authz/catalog.yaml для автономного прогона тестов.
+service: control-plane
+version: 1
+resource_types:
+  project_profile: {scope: workspace, relations: [owner]}
+  task: {scope: workspace, relations: [owner, requested_by, assignee, type_role]}
+  run: {parent: task, relations: [holder]}
+  approval: {scope: workspace, relations: [requested_by]}
+  artifact: {parent: task}
+actions:
+  tasks.read: {resource: task, derived: "owner or requested_by or assignee or tasks.read@scope"}
+  tasks.write: {resource: task, derived: "owner or tasks.write@scope"}
+  tasks.claim: {resource: task, derived: "tasks.claim@scope"}
+  runs.control:
+    resources:
+      task: "runs.control@scope"
+      run: "holder or runs.control@task"
+  approvals.decide: {resource: approval, derived: "approvals.decide@scope but not requested_by"}
+  artifacts.read:
+    resources:
+      task: "tasks.read"
+      artifact: "artifacts.read@task"
+  workspaces.read: {resource: workspace}
+  events.read: {resource: workspace}
+  projects.read: {resource: project_profile, derived: "owner or projects.read@scope"}
+  org.manage: {resource: tenant}

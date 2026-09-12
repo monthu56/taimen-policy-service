@@ -1,0 +1,14 @@
+# Копия memory-service/authz/catalog.yaml для автономного прогона тестов.
+service: memory-service
+version: 1
+resource_types:
+  memory_namespace: {scope: workspace, tenant: true, relations: [owner]}
+actions:
+  memory.read:
+    resources:
+      workspace: null
+      memory_namespace: "owner or memory.read@scope or memory.read@tenant"
+  memory.write:
+    resources:
+      workspace: null
+      memory_namespace: "owner or memory.write@scope or memory.write@tenant"
