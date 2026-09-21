@@ -1,0 +1,3 @@
+# gitleaks: ложное срабатывание правила generic-api-key на имя переменной (bearer-часть
+# заголовка Authorization) в зависимости require_iam; строковых литералов на строке нет.
+9f347fe7c82dc278c38896bfdbd5d7247ae0c7e4:src/policy_service/app.py:generic-api-key:144
