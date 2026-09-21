@@ -1,6 +1,6 @@
 # policy-service
 
-*English. Русская версия: [README.ru.md](README.ru.md)*
+*English. Russian version: [README.ru.md](README.ru.md)*
 
 Platform Policy Decision Point (TAI-ADR-0025): ReBAC authorization over OpenFGA.
 Design of the first slice — [`docs/policy-service/design-v0.md`](https://github.com/taimen-ai/taimen/blob/main/docs/policy-service/design-v0.md)
