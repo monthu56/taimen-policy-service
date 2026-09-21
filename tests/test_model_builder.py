@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 
 import pytest
-from tests.conftest import catalog_paths
 
 from policy_service.catalog import CatalogError, load_catalog_file, parse_catalog
 from policy_service.model_builder import build_model
+from tests.conftest import catalog_paths
 
 
 def _types(model: dict) -> dict[str, dict]:

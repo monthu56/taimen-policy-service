@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-from tests.conftest import catalog_paths
 
 from policy_service.catalog import (
     CatalogError,
@@ -10,6 +9,7 @@ from policy_service.catalog import (
     parse_expression,
     relation_name,
 )
+from tests.conftest import catalog_paths
 
 
 def test_expression_grammar() -> None:
