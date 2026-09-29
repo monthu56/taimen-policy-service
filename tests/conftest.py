@@ -109,8 +109,17 @@ def env(tmp_path: Path) -> Iterator[Environment]:
 
 
 def catalog_paths() -> list[Path]:
+    """Закреплённые каталоги-фикстуры: на них проверяется семантика модели и проекции.
+
+    Сервис заморожен (TAI-ADR-0039), а каталоги соседей развиваются дальше: семантические
+    тесты на живых каталогах ломались бы от каждого нового действия ядра.
+    """
+    return sorted(FIXTURES.glob("*.yaml"))
+
+
+def live_catalog_paths() -> list[Path]:
     """Реальные каталоги из соседних сабмодулей, если они есть, иначе фикстуры."""
     real = [ROOT / "control-plane/authz/catalog.yaml", ROOT / "memory-service/authz/catalog.yaml"]
     if all(p.exists() for p in real):
         return real
-    return sorted(FIXTURES.glob("*.yaml"))
+    return catalog_paths()

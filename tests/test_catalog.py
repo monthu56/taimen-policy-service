@@ -9,7 +9,7 @@ from policy_service.catalog import (
     parse_expression,
     relation_name,
 )
-from tests.conftest import catalog_paths
+from tests.conftest import live_catalog_paths
 
 
 def test_expression_grammar() -> None:
@@ -47,7 +47,7 @@ def test_action_names_may_have_more_than_two_segments() -> None:
 
 
 def test_real_catalogs_parse() -> None:
-    catalogs = [load_catalog_file(p) for p in catalog_paths()]
+    catalogs = [load_catalog_file(p) for p in live_catalog_paths()]
     services = {c.service for c in catalogs}
     assert {"control-plane", "memory-service"} <= services
     cp = next(c for c in catalogs if c.service == "control-plane")
