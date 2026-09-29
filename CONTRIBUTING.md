@@ -7,22 +7,22 @@ Apache License 2.0.
 
 This repository holds one component of the platform: the Policy Service, the
 Policy Decision Point (ReBAC authorization over OpenFGA). The umbrella
-repository, [taimen-ai/taimen](https://github.com/taimen-ai/taimen), includes
+repository, [monthu56/taimen](https://github.com/monthu56/taimen), includes
 it as a git submodule and holds the platform-wide documents referenced below.
 
 ## Before you start
 
-- Read the [Product Vision](https://github.com/taimen-ai/taimen/blob/main/docs/product-vision.md)
-  and the [ADR registry](https://github.com/taimen-ai/taimen/blob/main/docs/adr/README.md).
+- Read the [Product Vision](https://github.com/monthu56/taimen/blob/main/docs/product-vision.md)
+  and the [ADR registry](https://github.com/monthu56/taimen/blob/main/docs/adr/README.md).
   Architecture decisions are recorded as ADRs (in Russian, with an English
   title line); English summaries are provided on request in the ADR's
   discussion.
 - This component has no ADR series of its own. The decisions behind it live in
   the umbrella registry — primarily
-  [TAI-ADR-0025](https://github.com/taimen-ai/taimen/blob/main/docs/adr/ADR-0025-authorization-model-and-policy-service.md)
+  [TAI-ADR-0025](https://github.com/monthu56/taimen/blob/main/docs/adr/ADR-0025-authorization-model-and-policy-service.md)
   (authorization model and policy service) — and in the design note
-  [`docs/policy-service/design-v0.md`](https://github.com/taimen-ai/taimen/blob/main/docs/policy-service/design-v0.md).
-- Check the [roadmap](https://github.com/taimen-ai/taimen/blob/main/docs/roadmap.md)
+  [`docs/policy-service/design-v0.md`](https://github.com/monthu56/taimen/blob/main/docs/policy-service/design-v0.md).
+- Check the [roadmap](https://github.com/monthu56/taimen/blob/main/docs/roadmap.md)
   and open issues before starting a large change. For anything that changes
   an API, a data model or a service boundary, open an issue first and propose
   an ADR in the umbrella repository.
@@ -34,8 +34,8 @@ contribution, so that the project can be relicensed or defended without
 tracking down every author. The CLA is checked by cla-assistant on each pull
 request; you sign once.
 
-- Individuals: [`cla/CLA-individual.md`](https://github.com/taimen-ai/taimen/blob/main/cla/CLA-individual.md)
-- Companies contributing on behalf of employees: [`cla/CLA-entity.md`](https://github.com/taimen-ai/taimen/blob/main/cla/CLA-entity.md)
+- Individuals: [`cla/CLA-individual.md`](https://github.com/monthu56/taimen/blob/main/cla/CLA-individual.md)
+- Companies contributing on behalf of employees: [`cla/CLA-entity.md`](https://github.com/monthu56/taimen/blob/main/cla/CLA-entity.md)
 
 The CLA grants the project a copyright and patent licence to your
 contribution; you keep your copyright.

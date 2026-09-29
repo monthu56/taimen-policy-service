@@ -3,12 +3,16 @@
 *English. Russian version: [README.ru.md](README.ru.md)*
 
 Platform Policy Decision Point (TAI-ADR-0025): ReBAC authorization over OpenFGA.
-Design of the first slice — [`docs/policy-service/design-v0.md`](https://github.com/taimen-ai/taimen/blob/main/docs/policy-service/design-v0.md)
+Design of the first slice — [`docs/policy-service/design-v0.md`](https://github.com/monthu56/taimen/blob/main/docs/policy-service/design-v0.md)
 in the umbrella repository.
 
 This component ships as the optional experimental `policy` profile of the open build
-([ADR-0040](https://github.com/taimen-ai/taimen/blob/main/docs/adr/ADR-0040-open-source-delivery-and-experimental-profiles.md)
+([ADR-0040](https://github.com/monthu56/taimen/blob/main/docs/adr/ADR-0040-open-source-delivery-and-experimental-profiles.md)
 of the umbrella) and is not part of the `core` profile.
+
+> **Status: frozen.** The service is not developed further until the platform returns to
+> fine-grained authorization (TAI-ADR-0039); the core authorizes with its own permission
+> model. The profile is kept buildable, but receives no new features.
 
 - `src/policy_service/catalog.py` — parsing of the resource servers' `authz/catalog.yaml`;
 - `model_builder.py` — building the OpenFGA model from the catalogs;
