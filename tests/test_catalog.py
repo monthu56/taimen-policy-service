@@ -32,6 +32,18 @@ def test_expression_errors(text: str) -> None:
 
 def test_relation_name() -> None:
     assert relation_name("tasks.read") == "tasks_read"
+    assert relation_name("agents.status.write") == "agents_status_write"
+
+
+def test_action_names_may_have_more_than_two_segments() -> None:
+    catalog = parse_catalog(
+        {
+            "service": "x",
+            "version": 1,
+            "actions": {"agents.status.write": {"resource": "workspace"}},
+        }
+    )
+    assert "agents.status.write" in catalog.actions
 
 
 def test_real_catalogs_parse() -> None:
@@ -91,6 +103,10 @@ def test_real_catalogs_parse() -> None:
         ),
         (
             {"service": "x", "version": 1, "actions": {"bad": {"resource": "workspace"}}},
+            "имя действия",
+        ),
+        (
+            {"service": "x", "version": 1, "actions": {"docs..read": {"resource": "workspace"}}},
             "имя действия",
         ),
     ],

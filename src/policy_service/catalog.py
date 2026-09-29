@@ -42,7 +42,7 @@ from typing import Any
 
 import yaml
 
-ACTION_RE = re.compile(r"^[a-z][a-z0-9_]*\.[a-z][a-z0-9_]*$")
+ACTION_RE = re.compile(r"^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$")
 NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 
 SCOPE_TYPES = frozenset({"tenant", "workspace"})
